@@ -2,7 +2,7 @@
 [XEphem](http://www.clearskyinstitute.com/xephem/index.html) is a full-featured astronomy application for all UNIX-like systems including Linux and MacOS X.
 
 ## Screenshot
-
+![XEphem 3.7.7](https://github.com/ponsfrilus/dockerGUI/blob/xephem/XEphem377-docker-demo.png?raw=true)
 
 ## Usage
   * Install [Docker](https://docs.docker.com/engine/installation/)
