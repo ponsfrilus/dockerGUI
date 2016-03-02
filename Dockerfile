@@ -3,7 +3,6 @@
 # docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:atom
 # docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:atom /bin/bash
 
-
 FROM ubuntu:14.04
 MAINTAINER @ponsfrilus
 
@@ -22,6 +21,9 @@ RUN apm install minimap color-picker pigments emmet atom-beautify \
                 auto-detect-indentation
 
 RUN apt-get clean autoclean autoremove
+# Save 68Mo
+RUN rm -f /home/developer/atom-amd64.deb
+
 # Replace 1000 with your user / group id
 RUN export uid=1000 gid=1000 && \
     echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
@@ -33,4 +35,4 @@ RUN export uid=1000 gid=1000 && \
 USER developer
 ENV HOME /home/developer
 
-CMD /usr/bin/atom
+CMD ["/usr/bin/atom", "-f", "/home/developer"]
