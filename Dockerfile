@@ -19,7 +19,7 @@ RUN apt-get --yes --fix-broken install
 # Use apm search <packages>
 RUN apm install minimap color-picker pigments emmet atom-beautify \
                 file-icons git-plus open-recent xkcd-comics \
-                auto-detect-indentation markdown-preview
+                auto-detect-indentation
 
 RUN apt-get clean autoclean autoremove
 # Replace 1000 with your user / group id
