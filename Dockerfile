@@ -1,7 +1,6 @@
 # https://brave.com/
 # docker build -t ponsfrilus/dockergui:brave .
 # docker run -ti --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:brave
-# docker run -ti --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:brave /bin/bash
 
 FROM ubuntu:16.04
 MAINTAINER @ponsfrilus
