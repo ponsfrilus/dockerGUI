@@ -1,38 +1,30 @@
-# http://fabiorehm.com/blog/2014/09/11/running-gui-apps-with-docker/
-# docker build -t ponsfrilus/dockergui:atom .
-# docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:atom
-# docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:atom /bin/bash
+# https://brave.com/
+# docker build -t ponsfrilus/dockergui:brave .
+# docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:brave
+# docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:brave /bin/bash
 
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER @ponsfrilus
+
+
+# Avoid dbconf error when building
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN mkdir -p /home/developer
 WORKDIR /home/developer
 
-RUN apt-get update
-RUN apt-get install -y curl wget firefox libcanberra-gtk-module
-RUN wget -O /home/developer/atom-amd64.deb $(curl -s https://api.github.com/repos/atom/atom/releases/latest | grep browser_download_url | grep atom-amd64.deb | cut -d '"' -f 4)
-RUN dpkg --install atom-amd64.deb || true
-RUN apt-get --yes --fix-broken install
+RUN apt update
+RUN apt install -y wget
+RUN apt install -y git
+RUN apt install -y gconf2 gconf-service
+RUN apt install -y gvfs-bin
+RUN apt install -y libgtk2.0
+RUN apt install -y libnotify4
+RUN apt install -y libnss3 libxtst6 libxss-dev
+RUN apt install -y python
+RUN apt install -y xdg-utils
+RUN apt install -y libasound2
+RUN wget -O brave.deb https://laptop-updates.brave.com/latest/dev/ubuntu64
+RUN dpkg -i ./brave.deb
 
-# Use apm search <packages>
-RUN apm install minimap color-picker pigments emmet atom-beautify \
-                file-icons git-plus open-recent xkcd-comics \
-                auto-detect-indentation
-
-RUN apt-get clean autoclean autoremove
-# Save 68Mo
-RUN rm -f /home/developer/atom-amd64.deb
-
-# Replace 1000 with your user / group id
-RUN export uid=1000 gid=1000 && \
-    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
-    echo "developer:x:${uid}:" >> /etc/group && \
-    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
-    chmod 0440 /etc/sudoers.d/developer && \
-    chown ${uid}:${gid} -R /home/developer
-
-USER developer
-ENV HOME /home/developer
-
-CMD ["/usr/bin/atom", "-f", "/home/developer"]
+CMD ["brave"]
