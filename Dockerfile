@@ -1,24 +1,14 @@
 # http://fabiorehm.com/blog/2014/09/11/running-gui-apps-with-docker/
-# docker build -t ponsfrilus/dockergui .
-# docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui
-
-FROM ubuntu:14.04
+# docker build -t ponsfrilus/dockergui:firefox .
+# docker run -ti --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ponsfrilus/dockergui:firefox
+FROM ubuntu:16.04
 MAINTAINER @ponsfrilus
-
 RUN apt-get update
-RUN apt-get install -y firefox libcanberra-gtk-module
+RUN apt-get install -y firefox
 RUN apt-get clean autoclean autoremove
-
-# Replace 1000 with your user / group id
-RUN export uid=1000 gid=1000 && \
-    mkdir -p /home/developer && \
-    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
-    echo "developer:x:${uid}:" >> /etc/group && \
-    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
-    chmod 0440 /etc/sudoers.d/developer && \
-    chown ${uid}:${gid} -R /home/developer
-
+RUN useradd -ms /bin/bash developer
+RUN usermod -aG sudo developer
 USER developer
-ENV HOME /home/developer
+#ENV HOME /home/developer
 WORKDIR /home/developer
-CMD /usr/bin/firefox
+CMD /usr/bin/firefox --no-remote --private
